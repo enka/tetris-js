@@ -4,21 +4,20 @@ class Tetris {
         this.canvas = canvas;
         this.context = canvas.getContext('2d');
         this.context.scale(this.scale, this.scale);
-        this.arena = new Arena(this.canvas.width / this.scale, this.canvas.height / this.scale);
-        this.player = new Player(this.arena);
+        this.scaledWidht = this.canvas.width / this.scale;
+        this.scaledHeight = this.canvas.height / this.scale;
+        this.arena = new Arena(this.scaledWidht, this.scaledHeight);
+        this.player = new Player(this);
 
         this.colors = [null, '#9F00EE', '#E8E702', '#EFA100', '#150FDB', '#03E8EB', '#03DA01', '#D50001'];
-        let lastTime = 0;
+        this.lastTime = 0;
+        this.isPlaying = false;
+        this.isGameOver = false;
+        this.setControls();
 
-        const update = (time = 0) => {
-            const deltaTime = time - lastTime;
-            lastTime = time;
-            this.player.update(deltaTime);
-            this.draw();
-            requestAnimationFrame(update);
-        };
-
-        update();
+        this.update = this.update.bind(this);
+        //this.newGame();
+        this.drawTitle();
     }
 
     draw() {
@@ -41,5 +40,70 @@ class Tetris {
                 }
             });
         });
+    }
+
+    drawTitle() {
+        this.drawCanvas();
+        this.drawText('Tetris JS');
+        this.drawSubText('Press ENTER to START');
+    }
+
+    drawText(text) {
+        this.context.font = '2px Verdana';
+        this.context.fillStyle = '#48A';
+        this.context.textAlign = 'center';
+        this.context.fillText(text, this.scaledWidht / 2, this.scaledHeight / 2);
+    }
+
+    drawSubText(text) {
+        this.context.font = '1px Verdana';
+        this.context.fillStyle = '#48A';
+        this.context.textAlign = 'center';
+        this.context.fillText(text, this.scaledWidht / 2, this.scaledHeight / 1.8);
+    }
+
+    gameOver(score) {
+        this.isPlaying = false;
+        this.isGameOver = true;
+        cancelAnimationFrame(this.gameId);
+        this.drawText('Game Over');
+        this.drawSubText(`Score: ${score}`);
+    }
+
+    setControls() {
+        document.addEventListener('keydown', event => {
+            if (event.keyCode === 32 && !this.isGameOver) {
+                this.pause();
+            } else if (event.keyCode === 13 && !this.isPlaying) {
+                this.newGame();
+            }
+        });
+    }
+
+    update(time = 0) {
+        if (this.isPlaying) {
+            const deltaTime = time - this.lastTime;
+            this.lastTime = time;
+            this.player.update(deltaTime);
+            this.draw();
+            this.gameId = requestAnimationFrame(this.update);
+        }
+    }
+
+    pause() {
+        if (this.isPlaying) {
+            this.isPlaying = false;
+            cancelAnimationFrame(this.gameId);
+            this.drawText('Pause');
+        } else {
+            this.isPlaying = true;
+            this.update();
+        }
+    }
+
+    newGame() {
+        this.isPlaying = true;
+        this.isGameOver = false;
+        this.update();
     }
 }
