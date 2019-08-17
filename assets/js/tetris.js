@@ -13,10 +13,9 @@ class Tetris {
         this.lastTime = 0;
         this.isPlaying = false;
         this.isGameOver = false;
-        this.setControls();
 
         this.update = this.update.bind(this);
-        //this.newGame();
+        this.setControls();
         this.drawTitle();
     }
 
@@ -49,23 +48,23 @@ class Tetris {
     }
 
     drawText(text) {
-        this.context.font = '2px Verdana';
-        this.context.fillStyle = '#48A';
+        this.context.font = '2px Arial';
+        this.context.fillStyle = '#4386A8';
         this.context.textAlign = 'center';
         this.context.fillText(text, this.scaledWidht / 2, this.scaledHeight / 2);
     }
 
     drawSubText(text) {
-        this.context.font = '1px Verdana';
-        this.context.fillStyle = '#48A';
+        this.context.font = '1px Arial';
+        this.context.fillStyle = '#4386A8';
         this.context.textAlign = 'center';
         this.context.fillText(text, this.scaledWidht / 2, this.scaledHeight / 1.8);
     }
 
     gameOver(score) {
+        cancelAnimationFrame(this.gameId);
         this.isPlaying = false;
         this.isGameOver = true;
-        cancelAnimationFrame(this.gameId);
         this.drawText('Game Over');
         this.drawSubText(`Score: ${score}`);
     }
