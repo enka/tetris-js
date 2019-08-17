@@ -1,6 +1,7 @@
 class Player {
-    constructor(arena) {
-        this.arena = arena;
+    constructor(tetris) {
+        this.tetris = tetris;
+        this.arena = tetris.arena;
         this.position = { x: 0, y: 0 };
         this.piece = null;
         this.score = 0;
@@ -59,6 +60,7 @@ class Player {
 
         if (this.arena.collide(this)) {
             this.arena.clear();
+            this.tetris.gameOver(this.score);
             this.score = 0;
             this.updateScore(this.score);
         }
@@ -95,16 +97,18 @@ class Player {
 
     setControls() {
         document.addEventListener('keydown', event => {
-            if (event.keyCode === 37) {
-                this.move(-1);
-            } else if (event.keyCode === 39) {
-                this.move(1);
-            } else if (event.keyCode === 40) {
-                this.drop();
-            } else if (event.keyCode === 81) {
-                this.rotate(-1);
-            } else if (event.keyCode === 87) {
-                this.rotate(1);
+            if (this.tetris.isPlaying) {
+                if (event.keyCode === 37) {
+                    this.move(-1);
+                } else if (event.keyCode === 39) {
+                    this.move(1);
+                } else if (event.keyCode === 40) {
+                    this.drop();
+                } else if (event.keyCode === 81) {
+                    this.rotate(-1);
+                } else if (event.keyCode === 87) {
+                    this.rotate(1);
+                }
             }
         });
     }
