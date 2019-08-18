@@ -4,9 +4,10 @@ body {
     font-family: sans-serif;
     font-size: 2em;
     text-align: center;
+    overscroll-behavior: contain;
 }
 
 canvas {
     border: solid 0.2em #fff;
-    height: 90vh;
+    height: 80vh;
 }
