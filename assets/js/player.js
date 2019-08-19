@@ -7,7 +7,10 @@ class Player {
         this.score = 0;
 
         this.dropCounter = 0;
-        this.dropInteval = 1000;
+        this.dropInterval = 1000;
+        this.scoreToNextLevel = 100;
+        this.dropIntervalDecrease = 100;
+        this.minDropInterval = 100;
 
         this.tetris.updateScore(this.score);
         this.reset();
@@ -37,11 +40,19 @@ class Player {
         if (this.arena.collide(this)) {
             this.position.y--;
             this.arena.merge(this);
-            this.reset();
             this.score += this.arena.sweep();
             this.tetris.updateScore(this.score);
+            this.increaseDropInterval();
+            this.reset();
         }
         this.dropCounter = 0;
+    }
+
+    increaseDropInterval() {
+        if (this.score >= this.scoreToNextLevel && this.dropInterval >= this.minDropInterval) {
+            this.dropInterval -= this.dropIntervalDecrease;
+            this.scoreToNextLevel *= 2;
+        }
     }
 
     move(direction) {
@@ -96,7 +107,7 @@ class Player {
 
     update(deltaTime) {
         this.dropCounter += deltaTime;
-        if (this.dropCounter > this.dropInteval) {
+        if (this.dropCounter > this.dropInterval) {
             this.drop();
         }
     }
