@@ -9,7 +9,7 @@ Tetris-like game based on the Youtube tutorial ['Write a Tetris game in JavaScri
 | Start Game   |    Enter    |     Tap     |
 | Pause Game   |    Space    |    Press    |
 | Move Right   | Right Arrow | Swipe Right |
-| MoveLeft     | Left Arrow  | Swype Left  |
+| MoveLeft     | Left Arrow  | Swipe Left  |
 | Move Down    | Down Arrow  | Swipe Down  |
 | Rotate Right |      W      |     Tap     |
 | Rotate Left  |      Q      |             |
